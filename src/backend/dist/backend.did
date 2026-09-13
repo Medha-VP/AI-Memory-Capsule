@@ -1,0 +1,166 @@
+type _ImmutableObjectStorageRefillResult = 
+ record {
+   success: opt bool;
+   topped_up_amount: opt nat;
+ };
+type _ImmutableObjectStorageRefillInformation = record {
+                                                  proposed_top_up_amount:
+                                                   opt nat;};
+type _ImmutableObjectStorageCreateCertificateResult = 
+ record {
+   blob_hash: text;
+   method: text;
+ };
+type Value = 
+ variant {
+   "bool": bool;
+   float: float64;
+   "int": int;
+   "nat": nat;
+   "null";
+   "text": text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UploadTrendPoint = 
+ record {
+   count: nat;
+   period: text;
+ };
+type Result__1 = 
+ record {
+   hasMore: bool;
+   rows: vec vec Cell;
+ };
+type Result_1 = 
+ variant {
+   err: Error;
+   ok;
+ };
+type Result = 
+ variant {
+   err: PasswordError;
+   ok;
+ };
+type PasswordError = 
+ variant {
+   alreadySet;
+   noPassword;
+   notFound;
+   notOwner;
+ };
+type KnowledgeGraph = 
+ record {
+   edges: vec GraphEdge;
+   nodes: vec GraphNode;
+ };
+type GraphNode = 
+ record {
+   id: text;
+   kind: text;
+   name: text;
+ };
+type GraphEdge = 
+ record {
+   relation: text;
+   source: text;
+   target: text;
+ };
+type ExternalBlob = blob;
+type Error = 
+ variant {
+   AmbiguousAttribute: record {
+                         field: text;
+                         sources: vec text;
+                       };
+   FrontendOriginMismatch: record {
+                             expected: vec text;
+                             got: text;
+                           };
+   FrontendOriginsNotConfigured;
+   MalformedCandid;
+   MissingField: text;
+   MixedSsoSources: record {
+                      otherKeys: vec text;
+                      ssoKeys: vec text;
+                    };
+   NoAttributes;
+   Stale: record {ageNs: nat;};
+   UnknownNonce;
+   UntrustedSsoSource: record {domain: text;};
+ };
+type DocumentView = 
+ record {
+   "blob": opt ExternalBlob;
+   category: opt DocumentCategory;
+   fileType: opt text;
+   hasPassword: bool;
+   id: nat;
+   locked: bool;
+   metadata: vec text;
+   name: opt text;
+   owner: principal;
+   summary: opt text;
+   uploadedAt: int;
+ };
+type DocumentCategory = 
+ variant {
+   achievements;
+   education;
+   finance;
+   identity;
+   insurance;
+   projects;
+ };
+type Cell = 
+ record {
+   name: text;
+   value: Value;
+ };
+type CategoryCount = 
+ record {
+   category: DocumentCategory;
+   count: nat;
+ };
+type AnalyticsOverview = 
+ record {
+   byCategory: vec CategoryCount;
+   totalDocuments: nat;
+ };
+service : {
+  _immutableObjectStorageBlobsAreLive: (hashes: vec blob) -> (vec bool) query;
+  _immutableObjectStorageBlobsToDelete: () -> (vec blob) query;
+  _immutableObjectStorageConfirmBlobDeletion: (blobs: vec blob) -> ();
+  _immutableObjectStorageCreateCertificate: (blobHash: text) ->
+   (_ImmutableObjectStorageCreateCertificateResult);
+  _immutableObjectStorageRefillCashier: (refillInformation:
+   opt _ImmutableObjectStorageRefillInformation) ->
+   (_ImmutableObjectStorageRefillResult);
+  _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
+  _initialize_access_control: () -> ();
+  _internet_identity_sign_in_finish: () -> (Result_1);
+  _internet_identity_sign_in_start: () -> (blob);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  changeDocumentPassword: (id: nat, password: text) -> (Result);
+  deleteDocument: (id: nat) -> (bool);
+  execute: (qJson: text) -> (Result__1) query;
+  getAnalyticsOverview: () -> (AnalyticsOverview) query;
+  getApiDoc: () -> (text) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getDocument: (id: nat, password: opt text) -> (opt DocumentView) query;
+  getKnowledgeGraph: () -> (KnowledgeGraph) query;
+  getUploadTrends: () -> (vec UploadTrendPoint) query;
+  isCallerAdmin: () -> (bool) query;
+  listDocuments: () -> (vec DocumentView) query;
+  removeDocumentPassword: (id: nat) -> (Result);
+  schema: () -> (text) query;
+  searchDocuments: (searchText: text) -> (vec DocumentView) query;
+  setDocumentPassword: (id: nat, password: text) -> (Result);
+  uploadDocument: (name: text, fileType: text, "blob": ExternalBlob,
+   password: opt text) -> (nat);
+  verifyDocumentPassword: (id: nat, password: text) -> (bool) query;
+}

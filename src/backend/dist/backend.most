@@ -1,0 +1,123 @@
+// Version: 4.0.0
+type AccessControlState__272325687 =
+  {
+    var adminAssigned : Bool;
+    userRoles : Map__386906547<Principal, UserRole__760801154>
+  };
+type AccessControlState__684829265 =
+  {
+    var adminAssigned : Bool;
+    userRoles : Map__386906547<Principal, UserRole__121525041>
+  };
+type Data__265875254<K, V> = {var count : Nat__58649523; kvs : [var ?(K, V)]};
+type DocumentCategory__432444529 =
+  {#achievements; #education; #finance; #identity; #insurance; #projects};
+type DocumentCategory__624120590 =
+  {#achievements; #education; #finance; #identity; #insurance; #projects};
+type DocumentCategory__817288435 =
+  {#achievements; #education; #finance; #identity; #insurance; #projects};
+type Document__57377506 =
+  {
+    blob : ExternalBlob__220559234;
+    category : DocumentCategory__624120590;
+    fileType : Text;
+    id : Nat;
+    metadata : [Text];
+    name : Text;
+    owner : Principal;
+    passwordHash : ?Blob;
+    passwordSalt : ?Blob;
+    summary : ?Text;
+    uploadedAt : Int
+  };
+type Document__811238603 =
+  {
+    blob : Blob;
+    category : DocumentCategory__817288435;
+    fileType : Text;
+    id : Nat;
+    metadata : [Text];
+    name : Text;
+    owner : Principal;
+    summary : ?Text;
+    uploadedAt : Int
+  };
+type DocumentsState__213504359 = {var nextId : Nat};
+type DocumentsState__873648999 = {var nextId : Nat};
+type ExternalBlob__220559234 = Blob;
+type Internal__161573640<K, V> =
+  {children : [var ?Node__430031793<K, V>]; data : Data__265875254<K, V>};
+type Leaf__1045638083<K, V> = {data : Data__265875254<K, V>};
+type Map__13625999<K, V> =
+  {var root : Node__430031793<K, V>; var size : Nat__58649523};
+type Map__386906547<K, V> = Map__670138087<K, V>;
+type Map__670138087<K, V> = Map__13625999<K, V>;
+type Nat__58649523 = Nat__920180692;
+type Nat__920180692 = Nat;
+type NewActor__106983032 =
+  {
+    var accessControlState : AccessControlState__684829265;
+    docs : Map__386906547<Nat, NewDocument__198042366>;
+    state : DocumentsState__213504359
+  };
+type NewActor__892711874 =
+  {
+    var accessControlState : AccessControlState__272325687;
+    docs : Map__386906547<Nat, Document__811238603>;
+    state : DocumentsState__873648999
+  };
+type NewDocument__198042366 =
+  {
+    blob : Blob;
+    category : DocumentCategory__432444529;
+    fileType : Text;
+    id : Nat;
+    metadata : [Text];
+    name : Text;
+    owner : Principal;
+    passwordHash : ?Blob;
+    passwordSalt : ?Blob;
+    summary : ?Text;
+    uploadedAt : Int
+  };
+type Node__430031793<K, V> =
+  {#internal : Internal__161573640<K, V>; #leaf : Leaf__1045638083<K, V>};
+type OldActor__649460792 =
+  {
+    var accessControlState : AccessControlState__684829265;
+    docs : Map__386906547<Nat, OldDocument__953237018>;
+    state : DocumentsState__213504359
+  };
+type OldActor__905563206 = {};
+type OldDocument__953237018 =
+  {
+    blob : Blob;
+    category : DocumentCategory__432444529;
+    fileType : Text;
+    id : Nat;
+    metadata : [Text];
+    name : Text;
+    owner : Principal;
+    summary : ?Text;
+    uploadedAt : Int
+  };
+type UserRole__121525041 = {#admin; #guest; #user};
+type UserRole__760801154 = {#admin; #guest; #user};
+type UserRole__91647283 = {#admin; #guest; #user};
+{
+  "20260829_010000" : (_old : OldActor__905563206) -> NewActor__892711874;
+  "20260829_020000" : (old : OldActor__649460792) -> NewActor__106983032
+}
+actor  {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__386906547<Principal, UserRole__91647283>
+    };
+  stable docs :
+    {
+      var root : Node__430031793<Nat, Document__57377506>;
+      var size : Nat__58649523
+    };
+  stable state : {var nextId : Nat}
+};
