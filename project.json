@@ -1,0 +1,19 @@
+{
+  "overview": "An AI-powered personal document management app that lets users upload, classify, search, and explore their documents, now with per-document password protection.",
+  "features": [
+    "Upload and store documents securely",
+    "Automatically classify documents into categories",
+    "Search documents with natural language",
+    "View analytics and upload trends",
+    "Explore a knowledge graph of documents",
+    "Protect individual documents with a password"
+  ],
+  "category": "productivity",
+  "tags": [
+    "document-management",
+    "ai",
+    "productivity",
+    "security"
+  ],
+  "last_updated": "2026-08-29T17:22:25.408Z"
+}
